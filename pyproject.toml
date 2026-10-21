@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gdpval-qc"
+version = "18.5"
+description = "Automated quality assessment of knowledge-work task datasets (instruction + inputs + golden solution + rubric verifiers)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["evaluation", "llm", "quality-assessment", "rubric"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    # Spec + config
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+    # LLM judge SDKs (lazy-imported; only the ones you use need to resolve at runtime)
+    "anthropic>=0.40.0",
+    "openai>=1.50.0",
+    "google-genai>=0.3.0",
+    # Document parsing for input/solution files
+    "python-docx>=1.1.0",
+    "openpyxl>=3.1.0",
+    "pypdf>=4.0.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+]
+
+[project.scripts]
+gdpval-assess = "gdpval_qc.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gdpval_qc*"]
+exclude = ["tests*", "runs*", ".v18_cache*"]
+
+[tool.setuptools.package-data]
+gdpval_qc = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
